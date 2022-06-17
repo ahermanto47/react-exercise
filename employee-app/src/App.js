@@ -2,16 +2,25 @@
 //import './App.css';
 import Header from "./components/Header"
 import Employees from "./components/Employees";
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 function App() {
-  const [employees, setEmployees] = useState(
-    [
-        {"id": 1, "name": "Josh" },
-        {"id": 2, "name": "Lisa" },
-        {"id": 3, "name": "Bob" },
-    ]
-  )
+  const [employees, setEmployees] = useState([])
+
+  useEffect(() => {
+    const getEmployees = async () => {
+      const employeesFromServer = await fetchEmployees();
+      setEmployees(employeesFromServer);
+    }
+
+    getEmployees()
+  }, [])
+
+  async function fetchEmployees() {
+    const res = await fetch("http://localhost:5000/employees");
+    const data = await res.json();
+    return data;
+  }
 
   function deleteEmployee(id){
     setEmployees(employees.filter((employee) => employee.id !== id))
