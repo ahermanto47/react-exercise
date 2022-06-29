@@ -1,5 +1,3 @@
-//import logo from './logo.svg';
-//import './App.css';
 import Header from "./components/Header"
 import Employees from "./components/Employees";
 import { useState, useEffect } from 'react'
@@ -17,7 +15,11 @@ function App() {
   }, [])
 
   async function fetchEmployees() {
-    const res = await fetch("http://localhost:5000/employees");
+    const res = await fetch("http://localhost:5000/Employees",{
+      headers: new Headers({
+        "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE2NTY1MzgxNTYsImV4cCI6MTY1NjYyNDU1Nn0.Fi09TpHP5pVdKK26mZ6kYAwSCBzv0cw3SUsIEgPjM_M"
+      })
+    });
     const data = await res.json();
     return data;
   }
@@ -28,7 +30,7 @@ function App() {
 
   return (
     <div className="container">
-      <Header title="List Of Employees"></Header>
+      <Header title="Employees Portal"></Header>
       {employees.length > 0 ? (
         <Employees employees={employees} onDelete={deleteEmployee}/>
       ) : (
