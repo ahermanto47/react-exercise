@@ -18,10 +18,9 @@ function Login({ onLogin }) {
         return
     }
 
-    onLogin({ username, password})
+    onLogin({username, password})
     setUsername('')
     setPassword('')
-
   }
 
   return (
@@ -40,7 +39,6 @@ function Login({ onLogin }) {
         </div>
         <input type='submit' value='Login' className='btn btn-block'/>
     </form>
-)
-}
+)}
 
 export default Login

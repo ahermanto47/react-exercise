@@ -22,10 +22,10 @@ function App() {
   async function fetchEmployees() {
     if (isAuthenticatedUser) {
       const res = await fetch("http://localhost:5000/Employees",{
-      headers: new Headers({
-        "Authorization": "Bearer "+ auth
-      })
-    });
+        headers: new Headers({
+          "Authorization": "Bearer "+ auth
+        })
+      });
       const data = await res.json();
       return data;
     }
@@ -73,17 +73,22 @@ function App() {
   return (
     <div className="container">
       <Header title="Employees Portal" 
-      onAdd={() => isAuthenticatedUser && setShowAddEmployee(!showAddEmployee)}
-      showAdd={showAddEmployee}
-      isAuthenticatedUser = {isAuthenticatedUser}
-      onLogin={login}/>
-      {(isAuthenticatedUser && showAddEmployee)  && <AddEmployee onAdd={addEmployee}/>}
+        onAdd={() => isAuthenticatedUser && setShowAddEmployee(!showAddEmployee)}
+        showAdd={showAddEmployee}
+        isAuthenticatedUser = {isAuthenticatedUser}
+        onLogin={login}/>
+
+      {(isAuthenticatedUser && showAddEmployee)  && 
+        <AddEmployee onAdd={addEmployee}/>}
+
       {isAuthenticatedUser && employees.length > 0 ? (
         <Employees employees={employees} onDelete={deleteEmployee}/>
       ) : (
         isAuthenticatedUser ? "No Employee To Show" : ""
       )}
-      {!isAuthenticatedUser && <Login onLogin={login}/>}
+
+      {!isAuthenticatedUser &&
+        <Login onLogin={login}/>}
     </div>
   );
 }
