@@ -34,7 +34,6 @@ function AddEmployee({ onAdd }) {
             </div>
             <input type='submit' value='Save' className='btn btn-block'/>
         </form>
-
     )
 }
 

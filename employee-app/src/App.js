@@ -2,10 +2,13 @@ import Header from "./components/Header";
 import Employees from "./components/Employees";
 import { useState, useEffect } from 'react';
 import AddEmployee from "./components/AddEmployee";
+import Login from "./components/Login"
 
 function App() {
-  const [showAddEmployee, setShowAddEmployee] = useState(false)
   const [employees, setEmployees] = useState([])
+  const [auth, setAuth] = useState('')
+  const [isAuthenticatedUser, setAuthenticatedUser] = useState(false)
+  const [showAddEmployee, setShowAddEmployee] = useState(false)
 
   useEffect(() => {
     const getEmployees = async () => {
@@ -14,54 +17,73 @@ function App() {
     }
 
     getEmployees()
-  }, [])
+  },[isAuthenticatedUser])
 
   async function fetchEmployees() {
-    // const res = await fetch("http://localhost:5000/Employees",{
-    //   headers: new Headers({
-    //     "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlcyI6WyJBRE1JTiJdLCJpYXQiOjE2NTY1MzgxNTYsImV4cCI6MTY1NjYyNDU1Nn0.Fi09TpHP5pVdKK26mZ6kYAwSCBzv0cw3SUsIEgPjM_M"
-    //   })
-    // });
-    const res = await fetch("http://localhost:5000/Employees");
-    const data = await res.json();
-    return data;
+    if (isAuthenticatedUser) {
+      const res = await fetch("http://localhost:5000/Employees",{
+      headers: new Headers({
+        "Authorization": "Bearer "+ auth
+      })
+    });
+      const data = await res.json();
+      return data;
+    }
+    return [];
   }
 
   async function addEmployee(employee) {
-    console.log(employee)
     const id = Math.floor(Math.random() * 100) + 1
     const newEmployee = {id, ...employee}
     const res = await fetch("http://localhost:5000/Employees",{
       method: 'POST',
       headers: {
+        "Authorization": "Bearer "+ auth,
         'Content-type': 'application/json'
       },
       body: JSON.stringify(newEmployee)
     })
-
-    const resData = await res.json();
-
+    const resData = await res.json()
     setEmployees([...employees, resData])
   }
 
   async function deleteEmployee(id){
-    await fetch(`http://localhost:5000/Employees/${id}`,{
+    await fetch(`http://localhost:5000/Employees/delete/${id}`,{
+      headers: {
+        "Authorization": "Bearer "+ auth,
+      },
       method: 'DELETE'
     })
     setEmployees(employees.filter((employee) => employee.id !== id))
   }
 
+  async function login(user){
+    const res = await fetch("http://localhost:4000/users/signin",{
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    })
+    const resData = await res.json()
+    setAuth(resData)
+    setAuthenticatedUser(true)
+  }
+
   return (
     <div className="container">
       <Header title="Employees Portal" 
-      onAdd={() => setShowAddEmployee(!showAddEmployee)}
-      showAdd={showAddEmployee}/>
-      {showAddEmployee && <AddEmployee onAdd={addEmployee}/>}
-      {employees.length > 0 ? (
+      onAdd={() => isAuthenticatedUser && setShowAddEmployee(!showAddEmployee)}
+      showAdd={showAddEmployee}
+      isAuthenticatedUser = {isAuthenticatedUser}
+      onLogin={login}/>
+      {(isAuthenticatedUser && showAddEmployee)  && <AddEmployee onAdd={addEmployee}/>}
+      {isAuthenticatedUser && employees.length > 0 ? (
         <Employees employees={employees} onDelete={deleteEmployee}/>
       ) : (
-        "No Employee To Show"
+        isAuthenticatedUser ? "No Employee To Show" : ""
       )}
+      {!isAuthenticatedUser && <Login onLogin={login}/>}
     </div>
   );
 }

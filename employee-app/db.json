@@ -1,14 +1,6 @@
 {
   "Employees": [
     {
-      "id": 1,
-      "name": "Josh"
-    },
-    {
-      "id": 2,
-      "name": "Lisa"
-    },
-    {
       "id": 9,
       "name": "Tim",
       "departmentCode": "HR"
@@ -16,6 +8,11 @@
     {
       "id": 70,
       "name": "Jerry",
+      "departmentCode": "HR"
+    },
+    {
+      "id": 8,
+      "name": "Lisa",
       "departmentCode": "HR"
     }
   ]
