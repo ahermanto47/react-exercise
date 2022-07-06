@@ -1,7 +1,22 @@
 {
-  "employees": [
-    {"id": 1, "name": "Josh" },
-    {"id": 2, "name": "Lisa" },
-    {"id": 3, "name": "Bob" }
-]
+  "Employees": [
+    {
+      "id": 1,
+      "name": "Josh"
+    },
+    {
+      "id": 2,
+      "name": "Lisa"
+    },
+    {
+      "id": 9,
+      "name": "Tim",
+      "departmentCode": "HR"
+    },
+    {
+      "id": 70,
+      "name": "Jerry",
+      "departmentCode": "HR"
+    }
+  ]
 }
